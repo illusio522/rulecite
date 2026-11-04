@@ -12,6 +12,7 @@
 - 평가 기준: @docs/03-evaluation.md
 - 작업 순서: @docs/04-roadmap.md
 - 문서 출처 규칙: @docs/05-data-sources.md
+- 가상 회사 설정: @docs/06-company-profile.md
 
 ## 작업 원칙
 
