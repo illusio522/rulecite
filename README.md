@@ -8,7 +8,7 @@
 
 ## 시작하기
 
-필요한 도구: Git, Docker, Java 21, Python 3.12, Claude Code
+필요한 도구: Git, Docker, Python 3.12, Claude Code
 
 ```bash
 cp .env.example .env
