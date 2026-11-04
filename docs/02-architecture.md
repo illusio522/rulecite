@@ -48,13 +48,14 @@ flowchart LR
 | `conversations` | 사용자, 질문, 답변, 사용한 조각, 응답 시간, 토큰 수 |
 | `ingestion_jobs` | 문서 ID, 상태, 오류 메시지, 시작·종료 시각 |
 
-임베딩 차원은 사용할 모델을 확정한 뒤 정한다. 모델을 바꾸면 전체를 다시 인덱싱한다.
+임베딩 차원은 1536이다. 임베딩 모델이나 차원을 바꾸면 전체를 다시 인덱싱한다.
 
 ## 설계 결정
 
 | 결정 | 이유 |
 |---|---|
 | 서버를 Python 하나로 구성 | [ADR 0001](adr/0001-single-python-service.md) |
+| Gemini API의 LLM과 임베딩 모델 사용 | [ADR 0002](adr/0002-llm-and-embedding-models.md) |
 | pgvector 사용 | 서비스 데이터와 벡터를 한곳에서 관리하고 권한 조건을 SQL로 함께 건다 |
 | RAG 프레임워크 미사용 | 동작 원리를 직접 익히고 설명할 수 있게 한다 |
 | 슬랙 Socket Mode 사용 | 공개 URL 없이 내 PC에서 개발할 수 있다 |
