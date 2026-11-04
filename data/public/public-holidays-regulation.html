@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
+ <head></head>
+ <body>
+  <input type="hidden" id="lsNm" name="lsNm" value="관공서의 공휴일에 관한 규정" /> 
+  <input type="hidden" id="lsId" name="lsId" value="002404" /> 
+  <input type="hidden" id="lsiSeq" name="lsiSeq" value="285779" /> 
+  <input type="hidden" id="ancYd" name="ancYd" value="20260430" /> 
+  <input type="hidden" id="efYd" name="efYd" value="20260511" /> 
+  <input type="hidden" id="ancNo" name="ancNo" value="36290" /> 
+  <input type="hidden" id="lsBdyChrCls" name="lsBdyChrCls" value="010202" /> 
+  <input type="hidden" id="lumIsConOrdin" value="" /> 
+  <input type="hidden" id="nwYnValue" value="Y" /> 
+  <input type="hidden" id="hstLnkDpYn" value="0" /> 
+  <style>
+.byl_pop ul li {
+	padding: 7px;
+	margin-left: 10px;
+}
+</style> 
+  <script type="text/javascript">
+$(document).ready(function(){
+	customResizePop(); // 본문 리사이즈
+	initEDotXPress('\uAD00\uACF5\uC11C\uC758 \uACF5\uD734\uC77C\uC5D0 \uAD00\uD55C \uADDC\uC815');
+});
+
+function customResizePop() {
+		// 본문 버튼 높이 만큼 제공한다. 13은 패딩값
+		var $contentHeight = $("#center").height() - ($('.body_top_area').height() + 13);
+		var $conTopHeight = $('#conTop').height() + 35;
+
+		var bdyValue = lsVO.bdyUpdValue.updateContentNm || 'lsBdy';
+		
+        //lsInfoP 가 열릴 때 본문은 무조건 조회 하기 때문에 조건문 밖에 위치 하도록 변경.
+		$('#viewwrapCenter').css('overflow-y', 'hidden');
+        $('#bodyContentTOP > #viewwrapCenter').height($contentHeight);
+        $('#conScroll').height($('#viewwrapCenter').height() - $conTopHeight);
+        
+        if (bdyValue == 'lsBdy') {
+			/* 본문에서는 법령명 고정 때문에 hidden 처리*/
+			$('#viewwrapCenter').css('overflow-y', 'hidden');
+			$('#bodyContentTOP > #viewwrapCenter').height($contentHeight);
+			if($('#viewwrapCenter2').height() != null || $('#viewwrapCenter2').height() == 0){
+				$('#bodyContentTOP > #viewwrapCenter2').height($contentHeight);
+				$('#conScroll').height($('#viewwrapCenter2').height() - $conTopHeight);
+				$('#viewwrapCenter2').css('overflow', 'hidden');
+			}
+			$('#bodyContent').css('width', 'inherit');
+		} else if (bdyValue == 'lsPtnThdCmp') {
+			lspttnThdCmpResize();
+		} else if (bdyValue == 'lumThdCmp') {
+			thdCmpNewScPResize();
+		} else if (bdyValue == 'lumThdCmpSc') {
+
+		} else if (bdyValue == 'thdCmpNew') {
+
+		} else if (bdyValue == 'lsOldAndNew') {				
+			// 신구법은 이전 이후 버튼 높이까지 마이너스 한다. 
+			$('#bodySideContent > #oldAndNewDiv').height(($contentHeight + $('#tmpWidth').height()-114));
+		} else if (bdyValue == 'lsRvsDocInfoR') {
+
+			$('#bodySideContent > #viewwrapCenter').height($contentHeight);
+			$('#conScroll').height($('#viewwrapCenter').height() - $conTopHeight);
+			$('#conTop').height($('.cont_top').height());
+			$('#rvsConScroll').height($('#viewwrapCenter').height() - $('#rvsConTop').height());
+			
+		} else {
+			$('#bodySideContent > #viewwrapCenter').height($contentHeight);
+		}
+}
+
+function fileLayer(temp){
+	var tempStr = $("#hwptext"+temp).attr("value");
+	if(tempStr.length > 32){
+ 		$("#hwptext"+temp).css("width", "80%").css("text-overflow", "ellipsis").css("overflow","hidden").css("white-space","nowrap");
+ 		$("#hwpxtext"+temp).css("width", "80%").css("text-overflow", "ellipsis").css("overflow","hidden").css("white-space","nowrap");
+ 		$("#pdftext"+temp).css("width", "80%").css("text-overflow", "ellipsis").css("overflow","hidden").css("white-space","nowrap");
+ 	}
+
+ 	$(".byl_pop").css("display","none");
+
+ 	//레이어높이값
+ 	var height = $("#fileSaveLayer"+temp).height();
+ 	//본문 제일 하단 위치값 
+	var pagePos = document.querySelector('#center');
+	pagePos = pagePos.getBoundingClientRect().bottom;
+	//레이어버튼위치값
+	var layPos =document.querySelector('#imgPos'+temp);
+	layPos = layPos.getBoundingClientRect().bottom;
+	var lay_pop = $('#fileSaveLayer'+temp);
+	var pos = $('#imgPos'+temp).position();
+	
+	if(pagePos > height+layPos){ //레이어가 잘리지 않을 때 
+		lay_pop.css('top', (pos.top)+25 + 'px');
+		lay_pop.css('left', '250px')
+	}else{ //레이어가 잘릴 때
+		lay_pop.css('top', ((pos.top)-height)+ 'px');
+		lay_pop.css('left', (pos.left)+25+'px');
+	}
+	document.getElementById("fileSaveLayer"+temp).style.display="block";
+}
+
+function copyToClipBoard(temp2){
+	var content = document.getElementById('textarea'+temp2);
+	content.select();
+	document.execCommand('copy');
+	alert("주소가 클립보드에 저장되었습니다.");
+	content.setSelectionRange(0,0);
+}
+
+function delLayer(temp){
+	document.getElementById("fileSaveLayer"+temp).style.display="none";
+}
+
+</script> 
+  <div id="contentBody" class="scr_ctrl"> 
+   <div id="sideCenter" class="cont_area"> 
+    <ul class="cont_icon"> 
+     <li><a><img alt="판" src="/LSW/images/button/btn_jostmdico.gif" />판례</a></li> 
+     <li><a><img alt="연" src="/LSW/images/button/btn_year3.gif" />연혁</a></li> 
+     <li><a><img alt="행" src="/LSW/images/button/btn_entrust3_2.gif" />위임행정규칙</a></li> 
+     <li><a><img alt="규" src="/LSW/images/button/btn_entrust4_2.gif" />규제</a></li> 
+     <li><a><img alt="한" src="/LSW/images/button/btn_oneviewIcon.gif" />한눈보기</a></li> 
+    </ul> 
+    <!-- 연혁법령 안내문구 --> 
+    <!-- 법령명 --> 
+    <div id="conTop" class="cont_top"> 
+     <a id="top"></a> 
+     <!-- 국민신문고 연결배너 출력 --> 
+     <h2> 관공서의 공휴일에 관한 규정 <span>( 약칭: 관공서공휴일규정 )</span> </h2> 
+     <div class="ct_sub"> 
+      <span>[시행 2026. 5. 11.] [대통령령 제36290호, 2026. 4. 30., 일부개정]</span> 
+     </div> 
+    </div> 
+    <!-- 소관부처 --> 
+    <div id="conScroll" class="scr_area" style="overflow-y: auto;"> 
+     <div class="cont_subtit"> 
+      <p> <a title="팝업으로 이동" onclick="javascript:cptOfiPop('http://www.mpm.go.kr'); return false;" href="#AJAX" target="_blank"> <span title="http://www.mpm.go.kr" style="cursor: pointer;">인사혁신처</span> (<span title="" style="cursor: pointer;">복무과</span>), 044-201-8436 </a> </p> 
+     </div> 
+     <!-- 조문정보 --> 
+     <a name="J1:0" id="J1:0"></a> 
+     <div class="pgroup"> 
+      <ul class="lawico01"> 
+       <li><a title="조문체계도 팝업으로 이동" style="text-decoration: none;" onclick="javascript:joStmdPop('285779', '0001', '00' );return false; " href="#AJAX"> <img alt="조문체계도버튼" src="/LSW/images/button/btn_jostmdico.gif" /> </a></li> 
+       <li><a title="연혁 팝업으로 이동" style="text-decoration: none;" onclick="javascript:fJoHstShow(this, '002404', '285779', '97914893', '010202');return false;" href="#AJAX"> <img alt="연혁" src="/LSW/images/button/btn_year3.gif" /> </a></li> 
+      </ul> 
+      <div class="lawcon"> 
+       <p class="pty1_p4"> <input name="joNoList" id="Y000100" style="vertical-align: middle;" onclick="javascript:getJoSelectLayer(this,'');" type="checkbox" value="1:0:000100:97914893" /> <span class="bl"><label for="Y000100"> 제1조(목적) </label> </span> 이 영은 <a title="팝업으로 이동" class="link sfon1" onclick="javascript:fncLsLawPop('1033028559','ALLJO','');" href="javascript:;">「국가공무원법」</a> 및 <a title="팝업으로 이동" class="link sfon1" onclick="javascript:fncLsLawPop('1033028561','ALLJO','');" href="javascript:;">「공휴일에 관한 법률」</a>에 따라 관공서의 공휴일에 관한 사항을 규정함을 목적으로 한다. <span class="sfon">&lt;개정 2021. 8. 4.&gt;</span> </p> 
+      </div> 
+     </div> 
+     <a name="J2:0" id="J2:0"></a> 
+     <div class="pgroup"> 
+      <ul class="lawico01"> 
+       <li><a title="조문체계도 팝업으로 이동" style="text-decoration: none;" onclick="javascript:joStmdPop('285779', '0002', '00' );return false; " href="#AJAX"> <img alt="조문체계도버튼" src="/LSW/images/button/btn_jostmdico.gif" /> </a></li> 
+       <li><a title="연혁 팝업으로 이동" style="text-decoration: none;" onclick="javascript:fJoHstShow(this, '002404', '285779', '97914895', '010202');return false;" href="#AJAX"> <img alt="연혁" src="/LSW/images/button/btn_year3.gif" /> </a></li> 
+      </ul> 
+      <div class="lawcon"> 
+       <p class="pty1_p4"> <input name="joNoList" id="Y000200" style="vertical-align: middle;" onclick="javascript:getJoSelectLayer(this,'');" type="checkbox" value="2:0:000200:97914895" /> <span class="bl"><label for="Y000200"> 제2조(공휴일) </label> </span> 관공서의 공휴일은 다음 각 호와 같다. 다만, 재외공관의 공휴일은 <a title="팝업으로 이동" class="link sfon1" onclick="javascript:fncLsLawPop('1033068327','ALLJO','');" href="javascript:;">「국경일에 관한 법률」</a>에 따른 국경일과 주재국의 공휴일로 한다. <span class="sfon">&lt;개정 1998. 12. 18., 2005. 6. 30., 2006. 9. 6., 2012. 12. 28., 2017. 10. 17., 2026. 4. 30.&gt;</span> </p>
+       <p class="pty1_de2_1"> </p> 
+       <p class="pty1_de2h">1. 일요일 </p> 
+       <p class="pty1_de2h">2. <a title="팝업으로 이동" class="link sfon1" onclick="javascript:fncLsLawPop('1033068329','ALLJO','');" href="javascript:;">「국경일에 관한 법률」</a>에 따른 국경일 </p> 
+       <p class="pty1_de2h">3. 1월 1일 </p> 
+       <p class="pty1_de2h">4. 설날 전날, 설날, 설날 다음 날(음력 12월 말일, 1월 1일, 2일) </p> 
+       <p class="pty1_de2h">5. 부처님 오신 날(음력 4월 8일) </p> 
+       <p class="pty1_de2h">6. 노동절(5월 1일) </p> 
+       <p class="pty1_de2h">7. 어린이날(5월 5일) </p> 
+       <p class="pty1_de2h">8. 현충일(6월 6일) </p> 
+       <p class="pty1_de2h">9. 추석 전날, 추석, 추석 다음 날(음력 8월 14일, 15일, 16일) </p> 
+       <p class="pty1_de2h">10. 기독탄신일(12월 25일) </p> 
+       <p class="pty1_de2h">10의2. <a title="팝업으로 이동" class="link sfon1" onclick="javascript:fncLsLawPop('1033028563','ALLJO','');" href="javascript:;">「공직선거법」</a> <a title="팝업으로 이동" class="link sfon2" onclick="javascript:fncLsLawPop('1033028565','JO','');" href="javascript:;">제34조</a>에 따른 임기만료에 의한 선거의 선거일 </p> 
+       <p class="pty1_de2h">11. 그 밖에 정부에서 수시 지정하는 날 </p> 
+       <p></p> 
+      </div> 
+     </div> 
+     <a name="J3:0" id="J3:0"></a> 
+     <div class="pgroup"> 
+      <ul class="lawico01"> 
+       <li><a title="조문체계도 팝업으로 이동" style="text-decoration: none;" onclick="javascript:joStmdPop('285779', '0003', '00' );return false; " href="#AJAX"> <img alt="조문체계도버튼" src="/LSW/images/button/btn_jostmdico.gif" /> </a></li> 
+       <li><a title="연혁 팝업으로 이동" style="text-decoration: none;" onclick="javascript:fJoHstShow(this, '002404', '285779', '97914897', '010202');return false;" href="#AJAX"> <img alt="연혁" src="/LSW/images/button/btn_year3.gif" /> </a></li> 
+       <li><a href="javascript:;" onclick="javascript:openCtlInfoList('285779', '002404', '0003', '00');return false;" style="text-decoration: none;" title="관련규정 팝업으로 이동"> <img src="images/button/btn_entrust4_2.gif" alt="관련규제버튼" /> </a></li> 
+      </ul> 
+      <div class="lawcon"> 
+       <p class="pty1_p4"> <input name="joNoList" id="Y000300" style="vertical-align: middle;" onclick="javascript:getJoSelectLayer(this,'');" type="checkbox" value="3:0:000300:97914897" /> <span class="bl"><label for="Y000300"> 제3조(대체공휴일) </label> </span> ① <a title="팝업으로 이동" class="link sfon2" onclick="javascript:fncLsLawPop('1033028567','JO','');" href="javascript:;">제2조</a><a title="팝업으로 이동" class="link sfon4" onclick="javascript:fncLsLawPop('1033028569','JO','');" href="javascript:;">제2호부터 제10호</a>까지의 공휴일이 다음 각 호의 어느 하나에 해당하는 경우에는 그 공휴일 다음의 첫 번째 비공휴일(<a title="팝업으로 이동" class="link sfon2" onclick="javascript:fncLsLawPop('1033028575','JO','');" href="javascript:;">제2조</a> 각 호의 공휴일이 아닌 날을 말한다. 이하 같다)을 대체공휴일로 한다. <span class="sfon">&lt;개정 2023. 5. 4., 2026. 4. 30.&gt;</span> </p>
+       <p class="pty1_de2h">1. <a title="팝업으로 이동" class="link sfon2" onclick="javascript:fncLsLawPop('1033028571','JO','');" href="javascript:;">제2조</a><a title="팝업으로 이동" class="link sfon4" onclick="javascript:fncLsLawPop('1033028573','JO','');" href="javascript:;">제2호</a>, <a title="팝업으로 이동" class="link sfon4" onclick="javascript:fncLsLawPop('1033028451','JO','');" href="javascript:;">제5호</a>부터 제7호까지 또는 제10호의 공휴일이 토요일이나 일요일과 겹치는 경우 </p> 
+       <p class="pty1_de2h">2. <a title="팝업으로 이동" class="link sfon2" onclick="javascript:fncLsLawPop('1033028453','JO','');" href="javascript:;">제2조</a><a title="팝업으로 이동" class="link sfon4" onclick="javascript:fncLsLawPop('1033028577','JO','');" href="javascript:;">제4호</a> 또는 <a title="팝업으로 이동" class="link sfon4" onclick="javascript:fncLsLawPop('1033028455','JO','');" href="javascript:;">제9호</a>의 공휴일이 일요일과 겹치는 경우 </p> 
+       <p class="pty1_de2h">3. 제2조제2호, 제4호부터 제7호까지, 제9호 또는 제10호의 공휴일이 토요일ㆍ일요일이 아닌 날에 같은 조 제2호부터 제10호까지의 규정에 따른 다른 공휴일과 겹치는 경우 </p> 
+       <p class="pty1_de2_1">② 제1항에 따른 대체공휴일이 같은 날에 겹치는 경우에는 그 대체공휴일 다음의 첫 번째 비공휴일까지 대체공휴일로 한다. </p> 
+       <p class="pty1_de2_1">③ 제1항 및 제2항에 따른 대체공휴일이 토요일인 경우에는 그 다음의 첫 번째 비공휴일을 대체공휴일로 한다. </p> 
+       <p class="pty1_de2"> <span class="sfon">[전문개정 2021. 8. 4.]</span> </p> 
+       <p></p> 
+      </div> 
+     </div> 
+     <a name="J4:0" id="J4:0"></a> 
+     <div class="pgroup"> 
+      <ul class="lawico01"> 
+       <li><a title="조문체계도 팝업으로 이동" style="text-decoration: none;" onclick="javascript:joStmdPop('285779', '0004', '00' );return false; " href="#AJAX"> <img alt="조문체계도버튼" src="/LSW/images/button/btn_jostmdico.gif" /> </a></li> 
+      </ul> 
+      <div class="lawcon"> 
+       <p class="pty1_p4"> <input name="joNoList" id="Y000400" style="vertical-align: middle;" onclick="javascript:getJoSelectLayer(this,'');" type="checkbox" value="4:0:000400:97914899" /> <span class="bl"><label for="Y000400"> 제4조(임시공휴일의 지정) </label> </span> <a title="팝업으로 이동" class="link sfon2" onclick="javascript:fncLsLawPop('1033028555','JO','');" href="javascript:;">제2조</a><a title="팝업으로 이동" class="link sfon4" onclick="javascript:fncLsLawPop('1033028557','JO','');" href="javascript:;">제11호</a>에 따른 공휴일을 지정하려는 경우에는 국무회의의 심의를 거쳐야 한다. </p>
+       <p class="pty1_de2"> <span class="sfon">[본조신설 2021. 8. 4.]</span> </p> 
+       <p></p> 
+      </div> 
+     </div> 
+     <!-- 조문정보 --> 
+     <!-- 부칙 영역 끝 --> 
+     <br /> 
+     <div id="arDivArea"> 
+      <a name="arArea"></a> 
+      <a name="J12615655" id="J12615655"></a> 
+      <div class="pgroup"> 
+       <p class="pty3" style="margin-bottom: -1px;"> <img id="ar12615655btn" style="vertical-align: middle;" alt="부칙<대통령령 제13155호, 1990. 11. 5.>조문목록 없음" src="/LSW/images/button/btn_dot.gif" /> <input name="arInf" id="chk12615655" style="vertical-align: middle;" type="checkbox" alt="부칙 <대통령령 제13155호, 1990. 11. 5.>체크박스 " value="12615655" /> <a class="nun" onclick="javascript:arView('ar12615655','<대통령령 제13155호, 1990. 11. 5.>'); return false;" href="#AJAX"> <label for="chk12615655"> <span class="bl"> 부      칙</span> </label> <span class="sfon">&lt;대통령령 제13155호, 1990. 11. 5.&gt;</span> </a> </p> 
+       <p class="pty3_dep1">이 영은 1991년 1월 1일부터 시행한다.</p> 
+      </div> 
+      <a name="J12615657" id="J12615657"></a> 
+      <div class="pgroup"> 
+       <p class="pty3" style="margin-bottom: -1px;"> <img id="ar12615657btn" style="vertical-align: middle;" alt="부칙<대통령령 제15939호, 1998. 12. 18.>조문목록 없음" src="/LSW/images/button/btn_dot.gif" /> <input name="arInf" id="chk12615657" style="vertical-align: middle;" type="checkbox" alt="부칙 <대통령령 제15939호, 1998. 12. 18.>체크박스 " value="12615657" /> <a class="nun" onclick="javascript:arView('ar12615657','<대통령령 제15939호, 1998. 12. 18.>'); return false;" href="#AJAX"> <label for="chk12615657"> <span class="bl"> 부      칙</span> </label> <span class="sfon">&lt;대통령령 제15939호, 1998. 12. 18.&gt;</span> </a> </p> 
+       <p class="pty3_dep1">이 영은 1999년 1월 1일부터 시행한다.</p> 
+      </div> 
+      <a name="J12615659" id="J12615659"></a> 
+      <div class="pgroup"> 
+       <p class="pty3" style="margin-bottom: -1px;"> <img id="ar12615659btn" style="vertical-align: middle;" alt="부칙<대통령령 제18893호, 2005. 6. 30.>조문목록 없음" src="/LSW/images/button/btn_dot.gif" /> <input name="arInf" id="chk12615659" style="vertical-align: middle;" type="checkbox" alt="부칙 <대통령령 제18893호, 2005. 6. 30.>체크박스 " value="12615659" /> <a class="nun" onclick="javascript:arView('ar12615659','<대통령령 제18893호, 2005. 6. 30.>'); return false;" href="#AJAX"> <label for="chk12615659"> <span class="bl"> 부      칙</span> </label> <span class="sfon">&lt;대통령령 제18893호, 2005. 6. 30.&gt;</span> </a> </p> 
+       <p class="pty3_dep1">①(시행일) 이 영은 공포한 날부터 시행한다.</p>
+       <p class="pty3_dep1">②(국경일중 제헌절에 관한 경과조치) 제2조제2호의 개정규정에 불구하고 제헌절에 관하여는 2007년 12월 31일까지 공휴일로 한다.</p> 
+      </div> 
+      <a name="J12615661" id="J12615661"></a> 
+      <div class="pgroup"> 
+       <p class="pty3" style="margin-bottom: -1px;"> <img id="ar12615661btn" style="vertical-align: middle;" alt="부칙<대통령령 제19674호, 2006. 9. 6.>조문목록 없음" src="/LSW/images/button/btn_dot.gif" /> <input name="arInf" id="chk12615661" style="vertical-align: middle;" type="checkbox" alt="부칙 <대통령령 제19674호, 2006. 9. 6.>체크박스 " value="12615661" /> <a class="nun" onclick="javascript:arView('ar12615661','<대통령령 제19674호, 2006. 9. 6.>'); return false;" href="#AJAX"> <label for="chk12615661"> <span class="bl"> 부      칙</span> </label> <span class="sfon">&lt;대통령령 제19674호, 2006. 9. 6.&gt;</span> </a> </p> 
+       <p class="pty3_dep1">이 영은 공포한 날부터 시행한다.</p> 
+      </div> 
+      <a name="J12615663" id="J12615663"></a> 
+      <div class="pgroup"> 
+       <p class="pty3" style="margin-bottom: -1px;"> <img id="ar12615663btn" style="vertical-align: middle;" alt="부칙<대통령령 제24273호, 2012. 12. 28.>조문목록 없음" src="/LSW/images/button/btn_dot.gif" /> <input name="arInf" id="chk12615663" style="vertical-align: middle;" type="checkbox" alt="부칙 <대통령령 제24273호, 2012. 12. 28.>체크박스 " value="12615663" /> <a class="nun" onclick="javascript:arView('ar12615663','<대통령령 제24273호, 2012. 12. 28.>'); return false;" href="#AJAX"> <label for="chk12615663"> <span class="bl"> 부      칙</span> </label> <span class="sfon">&lt;대통령령 제24273호, 2012. 12. 28.&gt;</span> </a> </p> 
+       <p class="pty3_dep1">이 영은 공포한 날부터 시행한다.</p> 
+      </div> 
+      <a name="J12615665" id="J12615665"></a> 
+      <div class="pgroup"> 
+       <p class="pty3" style="margin-bottom: -1px;"> <img id="ar12615665btn" style="vertical-align: middle;" alt="부칙<대통령령 제24828호, 2013. 11. 5.>조문목록 없음" src="/LSW/images/button/btn_dot.gif" /> <input name="arInf" id="chk12615665" style="vertical-align: middle;" type="checkbox" alt="부칙 <대통령령 제24828호, 2013. 11. 5.>체크박스 " value="12615665" /> <a class="nun" onclick="javascript:arView('ar12615665','<대통령령 제24828호, 2013. 11. 5.>'); return false;" href="#AJAX"> <label for="chk12615665"> <span class="bl"> 부      칙</span> </label> <span class="sfon">&lt;대통령령 제24828호, 2013. 11. 5.&gt;</span> </a> </p> 
+       <p class="pty3_dep1">이 영은 공포한 날부터 시행한다.</p> 
+      </div> 
+      <a name="J12615667" id="J12615667"></a> 
+      <div class="pgroup"> 
+       <p class="pty3" style="margin-bottom: -1px;"> <img id="ar12615667btn" style="vertical-align: middle;" alt="부칙<대통령령 제28394호, 2017. 10. 17.>조문목록 없음" src="/LSW/images/button/btn_dot.gif" /> <input name="arInf" id="chk12615667" style="vertical-align: middle;" type="checkbox" alt="부칙 <대통령령 제28394호, 2017. 10. 17.>체크박스 " value="12615667" /> <a class="nun" onclick="javascript:arView('ar12615667','<대통령령 제28394호, 2017. 10. 17.>'); return false;" href="#AJAX"> <label for="chk12615667"> <span class="bl"> 부      칙</span> </label> <span class="sfon">&lt;대통령령 제28394호, 2017. 10. 17.&gt;</span> </a> </p> 
+       <p class="pty3_dep1">이 영은 공포한 날부터 시행한다.</p> 
+      </div> 
+      <a name="J12615669" id="J12615669"></a> 
+      <div class="pgroup"> 
+       <p class="pty3" style="margin-bottom: -1px;"> <img id="ar12615669btn" style="vertical-align: middle;" alt="부칙<대통령령 제31930호,  2021. 8. 4.>조문목록 없음" src="/LSW/images/button/btn_dot.gif" /> <input name="arInf" id="chk12615669" style="vertical-align: middle;" type="checkbox" alt="부칙 <대통령령 제31930호,  2021. 8. 4.>체크박스 " value="12615669" /> <a class="nun" onclick="javascript:arView('ar12615669','<대통령령 제31930호,  2021. 8. 4.>'); return false;" href="#AJAX"> <label for="chk12615669"> <span class="bl"> 부      칙</span> </label> <span class="sfon">&lt;대통령령 제31930호, 2021. 8. 4.&gt;</span> </a> </p> 
+       <p class="pty3_dep1">이 영은 공포한 날부터 시행한다. 다만, 제1조의 개정규정은 2022년 1월 1일부터 시행한다.</p> 
+      </div> 
+      <a name="J12615671" id="J12615671"></a> 
+      <div class="pgroup"> 
+       <p class="pty3" style="margin-bottom: -1px;"> <img id="ar12615671btn" style="vertical-align: middle;" alt="부칙<대통령령 제33448호,  2023. 5. 4.>조문목록 없음" src="/LSW/images/button/btn_dot.gif" /> <input name="arInf" id="chk12615671" style="vertical-align: middle;" type="checkbox" alt="부칙 <대통령령 제33448호,  2023. 5. 4.>체크박스 " value="12615671" /> <a class="nun" onclick="javascript:arView('ar12615671','<대통령령 제33448호,  2023. 5. 4.>'); return false;" href="#AJAX"> <label for="chk12615671"> <span class="bl"> 부      칙</span> </label> <span class="sfon">&lt;대통령령 제33448호, 2023. 5. 4.&gt;</span> </a> </p> 
+       <p class="pty3_dep1">이 영은 공포한 날부터 시행한다.</p> 
+      </div> 
+      <a name="J12616033" id="J12616033"></a> 
+      <div class="pgroup"> 
+       <p class="pty3" style="margin-bottom: -1px;"> <img id="ar12616033btn" style="vertical-align: middle;" alt="부칙<대통령령 제36290호,  2026. 4. 30.>조문목록 없음" src="/LSW/images/button/btn_dot.gif" /> <input name="arInf" id="chk12616033" style="vertical-align: middle;" type="checkbox" alt="부칙 <대통령령 제36290호,  2026. 4. 30.>체크박스 " value="12616033" /> <a class="nun" onclick="javascript:arView('ar12616033','<대통령령 제36290호,  2026. 4. 30.>'); return false;" href="#AJAX"> <label for="chk12616033"> <span class="bl"> 부      칙</span> </label> <span class="sfon">&lt;대통령령 제36290호, 2026. 4. 30.&gt;</span> </a> </p> 
+       <p class="pty3_dep1">이 영은 2026년 5월 1일부터 시행한다. 다만, 제2조 각 호 외의 부분 단서 및 같은 조 제2호의 개정규정은 2026년 5월 11일부터 시행한다.</p> 
+      </div> 
+     </div> 
+     <!-- 부칙 영역 끝 --> 
+     <!-- 별표 서식 시작 --> 
+     <!-- 별표 서식 끝 --> 
+    </div> 
+   </div> 
+  </div> 
+ </body>
+</html>
