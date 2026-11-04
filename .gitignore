@@ -1,0 +1,26 @@
+# Secrets
+.env
+.env.local
+secrets/
+
+# Claude Code
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Java
+target/
+build/
+.gradle/
+
+# IDE and OS
+.idea/
+.vscode/
+.DS_Store
+
+# Evaluation output
+eval/results/*.tmp

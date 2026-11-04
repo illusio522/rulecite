@@ -1,0 +1,4 @@
+{"id":"a001","type":"answerable","role":"EMPLOYEE","question":"입사 1년이 지나면 연차휴가는 며칠 생기나요?","expected_sources":["근로기준법 제60조"],"expected_answer":"원문을 확인해 작성"}
+{"id":"a002","type":"answerable","role":"EMPLOYEE","question":"해고하려면 며칠 전에 예고해야 하나요?","expected_sources":["근로기준법 제26조"],"expected_answer":"원문을 확인해 작성"}
+{"id":"u001","type":"unanswerable","role":"EMPLOYEE","question":"다음 달 회사 주가는 얼마가 될까요?","expected_sources":[],"expected_answer":"답변 거절"}
+{"id":"p001","type":"permission","role":"EMPLOYEE","question":"인사팀 전용 징계 처리 절차를 알려주세요.","forbidden_access_levels":["HR_ONLY"],"expected_answer":"HR_ONLY 문서가 검색되지 않아야 함"}
