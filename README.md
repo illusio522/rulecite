@@ -49,6 +49,7 @@ Claude Code가 열리면 다음을 입력합니다.
 | DB | PostgreSQL 17 + pgvector | 서비스 데이터와 벡터 저장. shared-infra의 `pgvector/pgvector:pg17` 이미지 |
 | DB 드라이버 | `psycopg[binary]` | PostgreSQL 접속과 SQL 실행. ORM 없이 SQL을 직접 쓴다 |
 | 설정 | `pydantic-settings` | `.env`와 환경 변수를 타입이 있는 설정으로 읽기 |
+| HTML 파싱 | `beautifulsoup4` | 국가법령정보센터 법령 HTML에서 조문 추출 |
 | 테스트 (개발용) | `pytest` | 테스트 실행 |
 | 테스트 (개발용) | `httpx2` | FastAPI `TestClient`가 요청을 보낼 때 쓰는 HTTP 클라이언트 |
 | lint·format (개발용) | `ruff` | 코드 검사와 정렬 |
