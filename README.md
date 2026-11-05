@@ -8,7 +8,7 @@
 
 ## 시작하기
 
-필요한 도구: Git, Docker, Python 3.12, Claude Code
+필요한 도구: Git, Docker, Python 3.14, Poetry, Claude Code
 
 ```bash
 cp .env.example .env
@@ -23,6 +23,23 @@ Claude Code가 열리면 다음을 입력합니다.
 ```
 
 로드맵에서 다음 작업을 골라 계획을 제시하고, 승인하면 구현을 진행합니다.
+
+## 기술 스택
+
+버전은 `server/pyproject.toml`과 `server/poetry.lock`에 고정되어 있습니다. 이 표에는 각 항목을 쓰는 이유만 적습니다.
+
+| 구분 | 이름 | 용도 |
+|---|---|---|
+| 언어 | Python 3.14 | 서버 전체 |
+| 패키지 관리 | Poetry | 의존성 설치와 버전 고정 |
+| 웹 프레임워크 | `fastapi` | HTTP API와 요청·응답 검증 |
+| 서버 실행 | `uvicorn` | FastAPI 앱을 띄우는 ASGI 서버 |
+| DB | PostgreSQL 17 + pgvector | 서비스 데이터와 벡터 저장. `docker-compose.yml`의 `pgvector/pgvector:pg17` 이미지 |
+| 테스트 (개발용) | `pytest` | 테스트 실행 |
+| 테스트 (개발용) | `httpx2` | FastAPI `TestClient`가 요청을 보낼 때 쓰는 HTTP 클라이언트 |
+| lint·format (개발용) | `ruff` | 코드 검사와 정렬 |
+
+LLM과 임베딩 모델은 [ADR 0002](docs/adr/0002-llm-and-embedding-models.md)에 있습니다.
 
 ## 포함된 명령
 

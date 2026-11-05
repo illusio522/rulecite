@@ -22,6 +22,8 @@
 - RAG 핵심 로직(분할, 임베딩 호출, 검색, 프롬프트 구성)은 LangChain 같은 프레임워크 없이 직접 구현한다.
 - 프론트엔드는 만들지 않는다. 사용자 접점은 슬랙 봇이고, 관리 기능은 API로 제공한다.
 - 중요한 설계 결정은 `docs/adr/`에 ADR로 남긴다.
+- 패키지는 `poetry add <패키지>==<버전>`처럼 정확한 버전으로 고정하고, 범위 지정(`^`, `~`, `>=`)을 쓰지 않는다. 버전을 올릴 때는 사용자 확인을 받는다.
+- 패키지를 추가·삭제하면 `README.md`의 기술 스택 표를, API 엔드포인트를 추가·삭제하면 `docs/02-architecture.md`의 API 표를 같은 PR에서 고친다.
 
 ## 절대 규칙
 
@@ -45,3 +47,11 @@
 
 - DB 실행: `docker compose up -d db`
 - 세부 빌드와 테스트 명령은 각 서비스를 만들 때 이 문서에 추가한다.
+
+`server/`의 명령은 `server/` 폴더에서 실행한다.
+
+- 의존성 설치: `poetry env use python3.14 && poetry install`
+- 서버 실행: `poetry run uvicorn rulecite.main:app --reload`
+- 테스트: `poetry run pytest`
+- lint: `poetry run ruff check`
+- format: `poetry run ruff format`
