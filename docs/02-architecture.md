@@ -40,15 +40,18 @@ flowchart LR
 
 ## 핵심 데이터 모델
 
-| 테이블 | 주요 컬럼 |
-|---|---|
-| `documents` | 제목, 종류, 접근 등급, 버전, 시행일, 원문 경로 |
-| `chunks` | 문서 ID, 장·조·항 경로, 본문, 임베딩, 접근 등급 |
-| `users` | 슬랙 ID, 역할 |
-| `conversations` | 사용자, 질문, 답변, 사용한 조각, 응답 시간, 토큰 수 |
-| `ingestion_jobs` | 문서 ID, 상태, 오류 메시지, 시작·종료 시각 |
+| 테이블 | 주요 컬럼 | 상태 |
+|---|---|---|
+| `documents` | `id`, `title`, `doc_type`(`LAW`·`COMPANY_RULE`), `access_level`(`ALL`·`HR_ONLY`), `version`, `effective_date`, `source_path` | `0001` 마이그레이션 |
+| `chunks` | `id`, `document_id`, `path`(장·조·항 경로), `content`, `embedding vector(1536)`, `access_level` | `0001` 마이그레이션 |
+| `users` | 슬랙 ID, 역할 | 3단계에서 생성 |
+| `conversations` | 사용자, 질문, 답변, 사용한 조각, 응답 시간, 토큰 수 | 3단계에서 생성 |
+| `ingestion_jobs` | 문서 ID, 상태, 오류 메시지, 시작·종료 시각 | 3단계에서 생성 |
 
+실제 정의는 `server/migrations/`에 있다.
+`chunks.access_level`은 외래 키로 문서의 접근 등급과 같은 값만 저장된다.
 임베딩 차원은 1536이다. 임베딩 모델이나 차원을 바꾸면 전체를 다시 인덱싱한다.
+개발 DB, 마이그레이션 방식, 벡터 인덱스를 미루는 이유는 [ADR 0003](adr/0003-database-and-migrations.md)에 있다.
 
 ## 기술 스택
 
@@ -68,6 +71,7 @@ flowchart LR
 |---|---|
 | 서버를 Python 하나로 구성 | [ADR 0001](adr/0001-single-python-service.md) |
 | Gemini API의 LLM과 임베딩 모델 사용 | [ADR 0002](adr/0002-llm-and-embedding-models.md) |
+| shared-infra DB, SQL 파일 마이그레이션, 정확 검색으로 시작 | [ADR 0003](adr/0003-database-and-migrations.md) |
 | pgvector 사용 | 서비스 데이터와 벡터를 한곳에서 관리하고 권한 조건을 SQL로 함께 건다 |
 | RAG 프레임워크 미사용 | 동작 원리를 직접 익히고 설명할 수 있게 한다 |
 | 슬랙 Socket Mode 사용 | 공개 URL 없이 내 PC에서 개발할 수 있다 |

@@ -45,13 +45,16 @@
 
 ## 명령어
 
-- DB 실행: `docker compose up -d db`
+- DB 실행: `docker compose -f ~/Workspace/shared-infra/docker-compose.yml --project-directory ~/Workspace/shared-infra up -d postgres`
+- DB 계정과 `.env` 생성(처음 한 번): `scripts/setup-dev-db.sh`
+- 이 저장소의 `docker-compose.yml`의 `db` 서비스는 shared-infra의 `postgres`와 포트가 겹치므로 실행하지 않는다.
 - 세부 빌드와 테스트 명령은 각 서비스를 만들 때 이 문서에 추가한다.
 
 `server/`의 명령은 `server/` 폴더에서 실행한다.
 
 - 의존성 설치: `poetry env use python3.14 && poetry install`
+- 마이그레이션 적용: `poetry run python -m rulecite.db.migrate`
 - 서버 실행: `poetry run uvicorn rulecite.main:app --reload`
-- 테스트: `poetry run pytest`
+- 테스트: `poetry run pytest` (DB가 실행 중이어야 한다)
 - lint: `poetry run ruff check`
 - format: `poetry run ruff format`
