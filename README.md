@@ -10,9 +10,21 @@
 
 필요한 도구: Git, Docker, Python 3.14, Poetry, Claude Code
 
+개발 DB는 `~/Workspace/shared-infra`의 PostgreSQL을 씁니다. 처음이면 shared-infra README대로 그 저장소의 `.env`를 먼저 만듭니다.
+
 ```bash
-cp .env.example .env
-docker compose up -d db
+# 공용 PostgreSQL 실행
+docker compose -f ~/Workspace/shared-infra/docker-compose.yml --project-directory ~/Workspace/shared-infra up -d postgres
+
+# RuleCite 전용 DB 계정과 .env 생성 (처음 한 번)
+scripts/setup-dev-db.sh
+
+# 서버 의존성 설치와 마이그레이션
+cd server
+poetry env use python3.14 && poetry install
+poetry run python -m rulecite.db.migrate
+cd ..
+
 claude
 ```
 
@@ -34,7 +46,9 @@ Claude Code가 열리면 다음을 입력합니다.
 | 패키지 관리 | Poetry | 의존성 설치와 버전 고정 |
 | 웹 프레임워크 | `fastapi` | HTTP API와 요청·응답 검증 |
 | 서버 실행 | `uvicorn` | FastAPI 앱을 띄우는 ASGI 서버 |
-| DB | PostgreSQL 17 + pgvector | 서비스 데이터와 벡터 저장. `docker-compose.yml`의 `pgvector/pgvector:pg17` 이미지 |
+| DB | PostgreSQL 17 + pgvector | 서비스 데이터와 벡터 저장. shared-infra의 `pgvector/pgvector:pg17` 이미지 |
+| DB 드라이버 | `psycopg[binary]` | PostgreSQL 접속과 SQL 실행. ORM 없이 SQL을 직접 쓴다 |
+| 설정 | `pydantic-settings` | `.env`와 환경 변수를 타입이 있는 설정으로 읽기 |
 | 테스트 (개발용) | `pytest` | 테스트 실행 |
 | 테스트 (개발용) | `httpx2` | FastAPI `TestClient`가 요청을 보낼 때 쓰는 HTTP 클라이언트 |
 | lint·format (개발용) | `ruff` | 코드 검사와 정렬 |
