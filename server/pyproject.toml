@@ -12,11 +12,11 @@ uvicorn = "0.54.0"
 psycopg = {version = "3.3.8", extras = ["binary"]}
 pydantic-settings = "2.16.2"
 beautifulsoup4 = "4.15.0"
+httpx2 = "2.16.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "9.2.0"
 ruff = "0.17.3"
-httpx2 = "2.16.0"
 
 [build-system]
 requires = ["poetry-core"]
