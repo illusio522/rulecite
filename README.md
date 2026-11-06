@@ -51,7 +51,7 @@ Claude Code가 열리면 다음을 입력합니다.
 | 설정 | `pydantic-settings` | `.env`와 환경 변수를 타입이 있는 설정으로 읽기 |
 | HTML 파싱 | `beautifulsoup4` | 국가법령정보센터 법령 HTML에서 조문 추출 |
 | 테스트 (개발용) | `pytest` | 테스트 실행 |
-| 테스트 (개발용) | `httpx2` | FastAPI `TestClient`가 요청을 보낼 때 쓰는 HTTP 클라이언트 |
+| HTTP 클라이언트 | `httpx2` | Gemini API 직접 호출. 테스트에서는 FastAPI `TestClient`와 가짜 응답(`MockTransport`)에 쓴다 |
 | lint·format (개발용) | `ruff` | 코드 검사와 정렬 |
 
 LLM과 임베딩 모델은 [ADR 0002](docs/adr/0002-llm-and-embedding-models.md)에 있습니다.

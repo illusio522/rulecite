@@ -98,7 +98,7 @@ flowchart LR
 | 테이블 | 주요 컬럼 | 상태 |
 |---|---|---|
 | `documents` | `id`, `title`, `doc_type`(`LAW`·`COMPANY_RULE`), `access_level`(`ALL`·`HR_ONLY`), `version`, `effective_date`, `source_path` | `0001` 마이그레이션 |
-| `chunks` | `id`, `document_id`, `path`(장·조·항 경로), `content`, `embedding vector(1536)`, `access_level` | `0001` 마이그레이션 |
+| `chunks` | `id`, `document_id`, `path`(장·조·항 경로), `citation`(출처 문자열), `content`, `embedding vector(1536)`, `access_level` | `0001`, `0002` 마이그레이션 |
 | `users` | 슬랙 ID, 역할 | 3단계에서 생성 |
 | `conversations` | 사용자, 질문, 답변, 사용한 조각, 응답 시간, 토큰 수 | 3단계에서 생성 |
 | `ingestion_jobs` | 문서 ID, 상태, 오류 메시지, 시작·종료 시각 | 3단계에서 생성 |
