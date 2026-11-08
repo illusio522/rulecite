@@ -56,6 +56,7 @@
 - 마이그레이션 적용: `poetry run python -m rulecite.db.migrate`
 - 문서 인덱싱: `poetry run python -m rulecite.ingestion.indexing` (`.env`의 `GEMINI_API_KEY` 필요, 무료 등급 요청 한도 때문에 수 분 걸린다)
 - 검색 확인: `poetry run python -m rulecite.rag.retrieval "질문" --levels ALL`
+- 답변 확인: `poetry run python -m rulecite.rag.answer "질문" --levels ALL`
 - 서버 실행: `poetry run uvicorn rulecite.main:app --reload`
 - 테스트: `poetry run pytest` (DB가 실행 중이어야 한다)
 - lint: `poetry run ruff check`

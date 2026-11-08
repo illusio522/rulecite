@@ -21,3 +21,4 @@ class Settings(BaseSettings):
     # DB만 쓰는 명령(마이그레이션 등)은 키 없이도 실행되도록 선택 값으로 둔다.
     gemini_api_key: SecretStr | None = None
     embedding_model: str = "gemini-embedding-2"
+    llm_model: str = "gemini-3.6-flash"
