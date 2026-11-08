@@ -22,3 +22,6 @@ class Settings(BaseSettings):
     gemini_api_key: SecretStr | None = None
     embedding_model: str = "gemini-embedding-2"
     llm_model: str = "gemini-3.6-flash"
+    # 검색 1위 점수가 이 값 미만이면 LLM을 부르지 않고 거절한다.
+    # 2026-11-08 임시값. 2단계 평가 데이터셋으로 정한다.
+    refusal_score_threshold: float = 0.70

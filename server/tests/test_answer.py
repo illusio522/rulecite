@@ -3,7 +3,11 @@ from datetime import date
 from rulecite.llm import Generation
 from rulecite.rag.answer import (
     DISCLAIMER,
+    REFUSAL_LOW_SCORE,
+    REFUSAL_MODEL,
+    REFUSAL_TEXT,
     SYSTEM_PROMPT,
+    answer_from_results,
     build_user_prompt,
     cited_sources,
     format_answer,
@@ -12,7 +16,7 @@ from rulecite.rag.answer import (
 from rulecite.rag.retrieval import SearchResult
 
 
-def result(number: int, content: str = "본문") -> SearchResult:
+def result(number: int, content: str = "본문", score: float = 0.8) -> SearchResult:
     return SearchResult(
         chunk_id=number,
         citation=f"복리후생 규정 제{number}조",
@@ -21,7 +25,7 @@ def result(number: int, content: str = "본문") -> SearchResult:
         document_title="복리후생 규정",
         document_version="1.0",
         effective_date=date(2026, 1, number),
-        score=0.8,
+        score=score,
     )
 
 
@@ -133,3 +137,74 @@ def test_disclaimer_is_added_even_without_sources():
     # then
     assert text.endswith(f"※ {DISCLAIMER}")
     assert "출처" not in text
+
+
+def test_low_top_score_is_refused_without_calling_llm():
+    """검색 1위 점수가 기준 미만이면 LLM을 부르지 않고 거절한다."""
+    # given
+    llm = FakeLLM("호출되면 안 되는 답변 [1]")
+    results = [result(1, score=0.65), result(2, score=0.60)]
+
+    # when
+    answer = answer_from_results(llm, "다음 달 주가는?", results, min_score=0.70)
+
+    # then
+    assert llm.calls == []
+    assert answer.refusal == REFUSAL_LOW_SCORE
+    assert answer.generation is None
+    assert answer.sources == ()
+
+
+def test_no_search_result_is_refused_without_calling_llm():
+    """검색 결과가 하나도 없으면 LLM을 부르지 않고 거절한다."""
+    # given
+    llm = FakeLLM("호출되면 안 되는 답변")
+
+    # when
+    answer = answer_from_results(llm, "질문", [], min_score=0.70)
+
+    # then
+    assert llm.calls == []
+    assert answer.refusal == REFUSAL_LOW_SCORE
+
+
+def test_top_score_at_threshold_calls_llm():
+    """1위 점수가 기준 이상이면 LLM으로 답변을 만든다."""
+    # given
+    llm = FakeLLM("5일입니다 [1].")
+    results = [result(1, score=0.70)]
+
+    # when
+    answer = answer_from_results(llm, "결혼 휴가는?", results, min_score=0.70)
+
+    # then
+    assert len(llm.calls) == 1
+    assert answer.refusal is None
+    assert [s.citation for s in answer.sources] == ["복리후생 규정 제1조"]
+
+
+def test_model_refusal_is_marked_and_has_no_sources():
+    """모델이 자료로 답할 수 없다고 답하면 모델 거절로 표시하고 출처를 비운다."""
+    # given
+    llm = FakeLLM("제공된 자료로는 답할 수 없습니다. [1]")
+    results = [result(1, score=0.75)]
+
+    # when
+    answer = answer_from_results(llm, "징계위원회는 몇 명?", results, min_score=0.70)
+
+    # then
+    assert answer.refusal == REFUSAL_MODEL
+    assert answer.sources == ()
+    assert answer.generation is not None
+
+
+def test_refused_answer_shows_standard_text_and_disclaimer():
+    """거절 답변은 정해진 안내 문장과 참고 정보 안내만 보여준다."""
+    # given
+    answer = answer_from_results(FakeLLM("무시됨"), "질문", [], min_score=0.70)
+
+    # when
+    text = format_answer(answer)
+
+    # then
+    assert text == f"{REFUSAL_TEXT}\n\n※ {DISCLAIMER}"
