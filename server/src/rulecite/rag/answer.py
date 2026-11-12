@@ -3,6 +3,10 @@
 출처 목록과 "참고 정보" 안내는 LLM이 아니라 이 코드가 붙인다.
 절대 규칙(출처 포함, 법률 자문 아님 안내)이 LLM의 실수에 좌우되지 않게 하기 위해서다.
 
+근거가 부족하면 거절한다.
+- LOW_SCORE: 검색 1위 점수가 기준 미만이면 LLM을 부르지 않는다.
+- MODEL: 점수는 넘었지만 모델이 자료로 답할 수 없다고 답했다.
+
 확인용 실행: poetry run python -m rulecite.rag.answer "질문" --levels ALL
 """
 
@@ -20,6 +24,9 @@ from rulecite.llm import LLM, GeminiLLM, Generation
 from rulecite.rag.retrieval import DEFAULT_TOP_K, SearchResult, retrieve
 
 NO_ANSWER = "제공된 자료로는 답할 수 없습니다."
+REFUSAL_TEXT = f"{NO_ANSWER} 인사팀에 문의해 주세요."
+REFUSAL_LOW_SCORE = "LOW_SCORE"
+REFUSAL_MODEL = "MODEL"
 DISCLAIMER = (
     "이 답변은 법률 자문이 아닌 참고 정보입니다. "
     "복잡한 사안은 인사팀이나 전문가에게 확인하세요."
@@ -44,7 +51,10 @@ class Answer:
     text: str
     sources: tuple[SearchResult, ...]
     results: tuple[SearchResult, ...]
-    generation: Generation
+    # 점수 기준으로 거절해 LLM을 부르지 않았으면 None이다.
+    generation: Generation | None
+    # None, REFUSAL_LOW_SCORE, REFUSAL_MODEL 중 하나다.
+    refusal: str | None = None
 
 
 def build_user_prompt(question: str, results: Sequence[SearchResult]) -> str:
@@ -81,6 +91,15 @@ def cited_sources(
 
 def generate_answer(llm: LLM, question: str, results: Sequence[SearchResult]) -> Answer:
     generation = llm.generate(SYSTEM_PROMPT, build_user_prompt(question, results))
+    if generation.text.startswith(NO_ANSWER):
+        return Answer(
+            question=question,
+            text=generation.text,
+            sources=(),
+            results=tuple(results),
+            generation=generation,
+            refusal=REFUSAL_MODEL,
+        )
     return Answer(
         question=question,
         text=generation.text,
@@ -96,14 +115,33 @@ def answer_question(
     llm: LLM,
     question: str,
     access_levels: Sequence[str],
+    min_score: float,
     top_k: int = DEFAULT_TOP_K,
 ) -> Answer:
+    """검색 1위 점수가 min_score 미만이면 LLM을 부르지 않고 거절한다."""
     results = retrieve(conn, embedder, question, access_levels, top_k)
+    return answer_from_results(llm, question, results, min_score)
+
+
+def answer_from_results(
+    llm: LLM, question: str, results: Sequence[SearchResult], min_score: float
+) -> Answer:
+    if not results or results[0].score < min_score:
+        return Answer(
+            question=question,
+            text=REFUSAL_TEXT,
+            sources=(),
+            results=tuple(results),
+            generation=None,
+            refusal=REFUSAL_LOW_SCORE,
+        )
     return generate_answer(llm, question, results)
 
 
 def format_answer(answer: Answer) -> str:
     """사용자에게 보여줄 최종 답변. 출처 목록과 안내 문장을 항상 붙인다."""
+    if answer.refusal is not None:
+        return "\n".join([REFUSAL_TEXT, "", f"※ {DISCLAIMER}"])
     lines = [answer.text]
     if answer.sources:
         lines += ["", "출처"]
@@ -135,14 +173,23 @@ def main() -> None:
     llm = GeminiLLM(api_key, settings.llm_model)
     with connect(settings) as conn:
         answer = answer_question(
-            conn, embedder, llm, args.question, args.levels.split(","), args.top_k
+            conn,
+            embedder,
+            llm,
+            args.question,
+            args.levels.split(","),
+            settings.refusal_score_threshold,
+            args.top_k,
         )
     print(format_answer(answer))
-    usage = answer.generation
-    print(
-        f"\n[tokens] prompt={usage.prompt_tokens} output={usage.output_tokens}"
-        f" thinking={usage.thinking_tokens}"
-    )
+    top_score = f"{answer.results[0].score:.3f}" if answer.results else "-"
+    print(f"\n[refusal] {answer.refusal} (top score {top_score})")
+    if answer.generation is not None:
+        usage = answer.generation
+        print(
+            f"[tokens] prompt={usage.prompt_tokens} output={usage.output_tokens}"
+            f" thinking={usage.thinking_tokens}"
+        )
 
 
 if __name__ == "__main__":
